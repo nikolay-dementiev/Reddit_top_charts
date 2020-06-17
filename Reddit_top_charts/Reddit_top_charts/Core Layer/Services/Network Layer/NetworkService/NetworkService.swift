@@ -34,7 +34,7 @@ class NetworkService: NetworkServiceProtocol {
             }
 
             AppService.shared.showNetworkActivity = true
-            client.send(urlRequest) {[weak self] (response) in
+            client.send(urlRequest) { [weak self] (response) in
                 AppService.shared.showNetworkActivity = false
                 switch response {
                 case let .success(urlResponse: resp, data: data, request: _):
@@ -58,6 +58,5 @@ class NetworkService: NetworkServiceProtocol {
             completion(.failure(NetworkError.undefinedError))
         }
     }
-
 }
 

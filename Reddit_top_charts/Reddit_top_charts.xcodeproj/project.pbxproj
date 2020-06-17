@@ -46,6 +46,13 @@
 		2F8FC471249904F800D3C80D /* TopService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC470249904F800D3C80D /* TopService.swift */; };
 		2F8FC4732499065200D3C80D /* TopRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC4722499065200D3C80D /* TopRequestParams.swift */; };
 		2F8FC47624990D3700D3C80D /* AppService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC47524990D3700D3C80D /* AppService.swift */; };
+		2F8FC479249A366700D3C80D /* TopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC478249A366700D3C80D /* TopCell.swift */; };
+		2F8FC47B249A3A3700D3C80D /* UpdateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC47A249A3A3700D3C80D /* UpdateCell.swift */; };
+		2F8FC47D249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC47C249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift */; };
+		2F8FC483249A57CD00D3C80D /* TopChartsResponseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC482249A57CD00D3C80D /* TopChartsResponseItem.swift */; };
+		2F8FC485249A62B800D3C80D /* TopChartsResponseListingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC484249A62B800D3C80D /* TopChartsResponseListingData.swift */; };
+		2F8FC487249A641B00D3C80D /* TopChartsResponseChildenItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC486249A641B00D3C80D /* TopChartsResponseChildenItem.swift */; };
+		2F8FC489249A64DE00D3C80D /* TopChartsResponseChildListingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC488249A64DE00D3C80D /* TopChartsResponseChildListingData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +97,13 @@
 		2F8FC470249904F800D3C80D /* TopService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopService.swift; sourceTree = "<group>"; };
 		2F8FC4722499065200D3C80D /* TopRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRequestParams.swift; sourceTree = "<group>"; };
 		2F8FC47524990D3700D3C80D /* AppService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppService.swift; sourceTree = "<group>"; };
+		2F8FC478249A366700D3C80D /* TopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopCell.swift; sourceTree = "<group>"; };
+		2F8FC47A249A3A3700D3C80D /* UpdateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCell.swift; sourceTree = "<group>"; };
+		2F8FC47C249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicator+Additions.swift"; sourceTree = "<group>"; };
+		2F8FC482249A57CD00D3C80D /* TopChartsResponseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChartsResponseItem.swift; sourceTree = "<group>"; };
+		2F8FC484249A62B800D3C80D /* TopChartsResponseListingData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopChartsResponseListingData.swift; sourceTree = "<group>"; };
+		2F8FC486249A641B00D3C80D /* TopChartsResponseChildenItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChartsResponseChildenItem.swift; sourceTree = "<group>"; };
+		2F8FC488249A64DE00D3C80D /* TopChartsResponseChildListingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChartsResponseChildListingData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +173,7 @@
 		2F8FC41424989F2100D3C80D /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
+				2F8FC47F249A578800D3C80D /* Models */,
 				2F8FC43D2498A88100D3C80D /* Extensions */,
 				2F8FC4382498A78E00D3C80D /* Styleguide */,
 				2F8FC4352498A70300D3C80D /* Helpers */,
@@ -235,6 +250,7 @@
 		2F8FC42A2498A48D00D3C80D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2F8FC477249A35DB00D3C80D /* TopCells */,
 				2F8FC42C2498A4D300D3C80D /* InitialViewInputOutput.swift */,
 				2F8FC42E2498A4F000D3C80D /* InitialViewController.swift */,
 			);
@@ -281,6 +297,7 @@
 				2F8FC4402498A8A400D3C80D /* String+Additions.swift */,
 				2F8FC4422498A8D100D3C80D /* UIViewController+Additions.swift */,
 				2F8FC4442498A90900D3C80D /* UILabel+Additions.swift */,
+				2F8FC47C249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -390,6 +407,50 @@
 			path = AppService;
 			sourceTree = "<group>";
 		};
+		2F8FC477249A35DB00D3C80D /* TopCells */ = {
+			isa = PBXGroup;
+			children = (
+				2F8FC478249A366700D3C80D /* TopCell.swift */,
+				2F8FC47A249A3A3700D3C80D /* UpdateCell.swift */,
+			);
+			path = TopCells;
+			sourceTree = "<group>";
+		};
+		2F8FC47F249A578800D3C80D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2F8FC480249A579200D3C80D /* ResponseItems */,
+				2F8FC481249A579C00D3C80D /* MapItems */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		2F8FC480249A579200D3C80D /* ResponseItems */ = {
+			isa = PBXGroup;
+			children = (
+				2F8FC48A249A657100D3C80D /* TopCharts */,
+			);
+			path = ResponseItems;
+			sourceTree = "<group>";
+		};
+		2F8FC481249A579C00D3C80D /* MapItems */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MapItems;
+			sourceTree = "<group>";
+		};
+		2F8FC48A249A657100D3C80D /* TopCharts */ = {
+			isa = PBXGroup;
+			children = (
+				2F8FC482249A57CD00D3C80D /* TopChartsResponseItem.swift */,
+				2F8FC484249A62B800D3C80D /* TopChartsResponseListingData.swift */,
+				2F8FC486249A641B00D3C80D /* TopChartsResponseChildenItem.swift */,
+				2F8FC488249A64DE00D3C80D /* TopChartsResponseChildListingData.swift */,
+			);
+			path = TopCharts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -462,6 +523,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F8FC485249A62B800D3C80D /* TopChartsResponseListingData.swift in Sources */,
 				2F8FC4412498A8A400D3C80D /* String+Additions.swift in Sources */,
 				2F8FC3FE2497AA7C00D3C80D /* AppDelegate.swift in Sources */,
 				2F8FC43A2498A79E00D3C80D /* Colors.swift in Sources */,
@@ -470,9 +532,14 @@
 				2F8FC45E2498ABEC00D3C80D /* ServerResponse.swift in Sources */,
 				2F8FC4342498A65E00D3C80D /* InitialCoordinator.swift in Sources */,
 				2F8FC4592498AB9500D3C80D /* Commons.swift in Sources */,
+				2F8FC47D249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift in Sources */,
 				2F8FC46B2499031E00D3C80D /* Request.swift in Sources */,
+				2F8FC489249A64DE00D3C80D /* TopChartsResponseChildListingData.swift in Sources */,
 				2F8FC4502498AA7600D3C80D /* ActivityIndicator.swift in Sources */,
+				2F8FC47B249A3A3700D3C80D /* UpdateCell.swift in Sources */,
 				2F8FC42F2498A4F000D3C80D /* InitialViewController.swift in Sources */,
+				2F8FC479249A366700D3C80D /* TopCell.swift in Sources */,
+				2F8FC483249A57CD00D3C80D /* TopChartsResponseItem.swift in Sources */,
 				2F8FC4532498AACF00D3C80D /* ImageDownloader.swift in Sources */,
 				2F8FC4692499026A00D3C80D /* RequestProtocol.swift in Sources */,
 				2F8FC43C2498A7BB00D3C80D /* Fonts.swift in Sources */,
@@ -496,6 +563,7 @@
 				2F8FC4262498A29700D3C80D /* ViewControllerFactory.swift in Sources */,
 				2F8FC4662499016C00D3C80D /* NetworkService.swift in Sources */,
 				2F8FC41F2498A1F600D3C80D /* Navigator.swift in Sources */,
+				2F8FC487249A641B00D3C80D /* TopChartsResponseChildenItem.swift in Sources */,
 				2F8FC4232498A26C00D3C80D /* BaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

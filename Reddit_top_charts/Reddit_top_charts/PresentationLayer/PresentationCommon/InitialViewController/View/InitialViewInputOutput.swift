@@ -8,11 +8,13 @@
 
 protocol InitialViewInput: class, AlertPresentable, ActivityIndicator {
     func setupInitialState()
+    func renderTopChartsData(_ data: [Any])
 }
 
-protocol InitialViewOutput {
+protocol InitialViewOutput: class {
     func viewIsReady()
-    func didSearchAction(for code: String?)
+    func loadData(after: String?, completion: (() -> Void)?)
+//    func didSearchAction(for code: String?)
 }
 
 extension InitialViewInput {

@@ -22,19 +22,30 @@ class InitialViewController: BaseViewController {
     }
 
     // MARK: - Props
+    private var pullControl = UIRefreshControl()
+    
+    @IBOutlet private weak var tableView: UITableView!
+    
 //    @IBOutlet weak private var searchTitleLabel: UILabel!
 //    @IBOutlet weak private var searchTextField: UITextField!
 //    @IBOutlet weak private var getDataButton: UIButton!
 //    var isValidCountryName: Bool { return Validator.isValidCityName(searchTextField.text) }
-    private lazy var tapRecognizer = makeTapGestureRecognizer()
+ //   private lazy var tapRecognizer = makeTapGestureRecognizer()
 
-    var output: InitialViewOutput!
+    var output: InitialViewOutput?
 
+    // MARK: - Private Props
+    private var dataSource: [Any] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupDefaultData()
-        output.viewIsReady()
+        output?.viewIsReady()
     }
 
     private func makeTapGestureRecognizer() -> UITapGestureRecognizer {
@@ -45,17 +56,7 @@ class InitialViewController: BaseViewController {
         super.viewWillAppear(animated)
 //        addKeyboardObserver()
 
-        navigationController?.isNavigationBarHidden = true
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-//        removeKeyboardObserver()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        fireAppearance()
+//        navigationController?.isNavigationBarHidden = true
     }
 
     @objc fileprivate func handleTap(_ sender: UITapGestureRecognizer) {
@@ -63,23 +64,47 @@ class InitialViewController: BaseViewController {
     }
 
     // MARK: - Actions
-    @IBAction private func searchAction(_ sender: Any) {
-//        output.didSearchAction(for: searchTextField.text)
-    }
+//    @IBAction private func searchAction(_ sender: Any) {
+////        output.didSearchAction(for: searchTextField.text)
+//    }
 
-    @IBAction func searchFieldEditingChanged(_ sender: Any) {
-        updateSearchButtonState()
+//    @IBAction func searchFieldEditingChanged(_ sender: Any) {
+//        updateSearchButtonState()
+//    }
+    
+    @objc private func refreshListData(_ sender: Any) {
+        self.pullControl.endRefreshing() // You can stop after API Call
+        // Call API
+        loadData { [weak self] in
+            DispatchQueue.main.async() {
+                self?.pullControl.endRefreshing()
+            }
+        }
     }
 
     // MARK: - Private API
-    private func fireAppearance() {
-//        searchTextField.becomeFirstResponder()
-    }
 
     private func setupDefaultData() {
-//        searchTextField.text = Settings.defaultCountryName
-//        searchTitleLabel.text = "SerchByCountryName".localized
-//        getDataButton.setTitle("GetData".localized, for: .normal)
+        title = "TopChartsCollectionVCTitle".localized
+        
+        pullControl.attributedTitle = NSAttributedString(string: "PullToRefreshTitle".localized)
+        pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
+        tableView.refreshControl = pullControl
+        
+        tableView.estimatedRowHeight = 120
+        tableView.rowHeight = UITableView.automaticDimension
+    }
+    
+    // Load data in the tableView
+    private func loadData(completion: (() -> Void)?) {
+        
+        output?.loadData(after: nil, completion: completion)
+    }
+    
+    // Load data in the tableView
+    private func loadNextPortion() {
+    
+        output?.loadData(after: nil, completion: nil)
     }
 }
 
@@ -87,34 +112,38 @@ class InitialViewController: BaseViewController {
 
 extension InitialViewController: InitialViewInput {
 
-    func setupInitialState() {
-        setupSearchViewStyle()
-        updateSearchButtonState()
+//    func setupInitialState() {
+//        setupSearchViewStyle()
+//        updateSearchButtonState()
+//    }
+    
+    func renderTopChartsData(_ data: [Any]) {
+        dataSource = data
     }
 
-    private func setupSearchViewStyle() {
-
-//        applyStyle(font: .smallFont,
-//                   textColor: .textColor,
-//                   to: searchTitleLabel)
+//    private func setupSearchViewStyle() {
 //
-//        searchTextField
-//            .font(.titleFont)
-//            .textColor(.textColor)
+////        applyStyle(font: .smallFont,
+////                   textColor: .textColor,
+////                   to: searchTitleLabel)
+////
+////        searchTextField
+////            .font(.titleFont)
+////            .textColor(.textColor)
+////
+////        getDataButton
+////            .cornerRadius(Settings.defaultCornerRadius)
+////            .backgroundColor(.headlineColor)
+////            .titleColor(.white, for: .normal)
+////            .font(.smallFont)
+//    }
 //
-//        getDataButton
-//            .cornerRadius(Settings.defaultCornerRadius)
-//            .backgroundColor(.headlineColor)
-//            .titleColor(.white, for: .normal)
-//            .font(.smallFont)
-    }
-
-    private func updateSearchButtonState() {
-//        getDataButton.isEnabled = isValidCountryName
-//        UIView.animate(withDuration: Settings.shortAnimationDuration) {
-//            self.getDataButton.alpha = self.getDataButton.isEnabled ? 1.0 : 0.5
-//        }
-    }
+//    private func updateSearchButtonState() {
+////        getDataButton.isEnabled = isValidCountryName
+////        UIView.animate(withDuration: Settings.shortAnimationDuration) {
+////            self.getDataButton.alpha = self.getDataButton.isEnabled ? 1.0 : 0.5
+////        }
+//    }
 }
 
 //extension InitialViewController: UITextFieldDelegate {
@@ -133,3 +162,42 @@ extension InitialViewController: InitialViewInput {
 //        view.removeGestureRecognizer(tapRecognizer)
 //    }
 //}
+
+//MARK: - UITableViewDataSource
+extension InitialViewController: UITableViewDataSource {
+
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return dataSource.count
+//    }
+
+//    func tableView(_ tableView: UITableView,
+//                   titleForHeaderInSection section: Int) -> String? {
+//
+//        return dataSource[section].date?.formatForCellSection()
+//    }
+
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+
+        return dataSource.count
+    }
+
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: TopCell.defaultReuseIdentifier, for: indexPath) as! TopCell
+        cell.renderTopData(dataSource[indexPath.section])
+
+        return cell
+    }
+}
+
+//MARK: - UITableViewDelegate
+extension InitialViewController: UITableViewDelegate {
+
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//
+//        return Settings.cellItemHeigh
+//    }
+}
+

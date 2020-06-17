@@ -30,3 +30,25 @@ extension UIViewController {
         child.removeFromParent()
     }
 }
+
+extension UIView {
+
+    // MARK: - Spinner animation
+    func spinnerStartAnimating(spinner child: SpinnerViewController?) {
+        guard let child = child else {
+            return
+        }
+        
+        child.view.frame = frame
+        addSubview(child.view)
+    }
+
+    func spinnerStopAnimating(spinner child: SpinnerViewController?) {
+        guard let child = child else {
+            return
+        }
+        child.willMove(toParent: nil)
+        child.view.removeFromSuperview()
+        child.removeFromParent()
+    }
+}

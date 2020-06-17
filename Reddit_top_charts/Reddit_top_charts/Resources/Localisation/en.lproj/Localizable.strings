@@ -8,3 +8,5 @@
 
 // UI CTA
 "Ok" = "Ok";
+"TopChartsCollectionVCTitle" = "Top charts";
+"PullToRefreshTitle" = "Pull to refresh";

@@ -17,7 +17,9 @@ extension TopRequestParams: JSONSerializable {
         let values: [String: Any?] = ["limit": limit,
                                       "after": after,
                                       "count": count]
-        let valueForReturn = values.filter { $0.value != nil } as [String: Any]
+        let valueForReturn = values
+            .filter { $0.value != nil }
+            .mapValues { $0! } as [String : Any]
         
         return valueForReturn
     }

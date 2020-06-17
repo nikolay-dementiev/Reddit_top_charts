@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ActivityIndicator {
-    var spinnerViewController: SpinnerViewController? {get set}
+    var spinnerViewController: SpinnerViewController? { get set }
     func startAnimate()
     func stopAnimate()
 }
@@ -17,14 +17,29 @@ protocol ActivityIndicator {
 extension ActivityIndicator where Self: UIViewController {
 
     func startAnimate() {
-        DispatchQueue.main.async {
-            self.spinnerStartAnimating(spinner: self.spinnerViewController)
+        DispatchQueue.main.async { [weak self] in
+            self?.spinnerStartAnimating(spinner: self?.spinnerViewController)
         }
     }
 
     func stopAnimate() {
-        DispatchQueue.main.async {
-            self.spinnerStopAnimating(spinner: self.spinnerViewController)
+        DispatchQueue.main.async { [weak self] in
+            self?.spinnerStopAnimating(spinner: self?.spinnerViewController)
+        }
+    }
+}
+
+extension ActivityIndicator where Self: UIView {
+
+    func startAnimate() {
+        DispatchQueue.main.async { [weak self] in
+            self?.spinnerStartAnimating(spinner: self?.spinnerViewController)
+        }
+    }
+
+    func stopAnimate() {
+        DispatchQueue.main.async { [weak self] in
+            self?.spinnerStopAnimating(spinner: self?.spinnerViewController)
         }
     }
 }

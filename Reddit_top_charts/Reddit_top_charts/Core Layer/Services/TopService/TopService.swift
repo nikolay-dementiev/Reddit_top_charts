@@ -11,28 +11,27 @@ import Foundation
 //typealias ListForecastItem = FiveDaysForecastResponseItem.ListForecastResponseItem
 
 class TopService {
-    typealias TopServiceCompletion = (Result<[Any]>) -> ()
+    typealias TopServiceCompletion = (Result<TopChartsResponseListingData?>) -> ()
 
     // MARK: - Private Props
     private var networkService = NetworkService()
 
     // MARK: - API
-    func getFiveDaysForecast(with params: TopRequestParams,
-                             completion: @escaping TopServiceCompletion) {
+    func getTopCharts(with params: TopRequestParams,
+                      completion: @escaping TopServiceCompletion) {
 
         let request = Request(method: .get,
                               endpoint: EndPoint.top,
                               params: params.toJson)
 
-//        networkService.execute(request) { (result: Result<Codable>) in
-////            switch result {
-////            case .success(let response):
-////                completion(.success(response.forecastList))
-////            case .failure(let error):
-////                completion(.failure(error))
-////            }
-//            completion(.failure(NetworkError.common("TEST")))
-//        }
+        networkService.execute(request) { (result: Result<TopChartsResponseItem>) in
+            switch result {
+            case .success(let response):
+                completion(.success(response.data))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 
 }

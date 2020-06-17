@@ -6,14 +6,16 @@
 //  Copyright © 2020 test reddit. All rights reserved.
 //
 
-class InitialPresenter {
-
+final class InitialPresenter {
+    private enum Settings {
+        static let limitForDataFetching: Int = 10
+    }
     // MARK: - Props
     weak var view: InitialViewInput!
 //    weak var flowDelegate: FiveDaysForecastFlowDelegate?
 
     // MARK: - Private Props
-//    private let restService = FiveDayForecastService()
+    private let restService = TopService()
 
 }
 
@@ -23,23 +25,45 @@ extension InitialPresenter: InitialViewOutput {
         view.setupInitialState()
     }
 
-    func didSearchAction(for code: String?) {
-//        view.startAnimate()
-//
-//        guard let code = code else { return }
-//        let params = FiveDayForecastRequestParams.init(countryName: code)
-//
-//        restService.getFiveDaysForecast(with: params) { [weak self] (result) in
-//            self?.view.stopAnimate()
-//
-//            switch result {
-//            case .success(let items):
+    func loadData(after: String? = nil,
+                  completion: (() -> Void)? = nil) {
+        view.startAnimate()
+        let params = TopRequestParams(limit: Settings.limitForDataFetching,
+                                      after: after,
+                                      count: nil)
+        
+        restService.getTopCharts(with: params) { [weak self] (result) in
+            self?.view.stopAnimate()
+            
+            switch result {
+            case .success(let items):
+                break
 //                self?.flowDelegate?.didReceiveFiveDaysForecast(items)
-//            case .failure(let error):
-//                self?.view.showAlert(title: nil,
-//                                     message: error.localizedDescription)
-//            }
-//        }
+            case .failure(let error):
+                self?.view.showAlert(title: nil,
+                                     message: error.localizedDescription)
+            }
+        }
+        
     }
+    
+//    func didSearchAction(for code: String?) {
+////        view.startAnimate()
+////
+////        guard let code = code else { return }
+////        let params = FiveDayForecastRequestParams.init(countryName: code)
+////
+////        restService.getFiveDaysForecast(with: params) { [weak self] (result) in
+////            self?.view.stopAnimate()
+////
+////            switch result {
+////            case .success(let items):
+////                self?.flowDelegate?.didReceiveFiveDaysForecast(items)
+////            case .failure(let error):
+////                self?.view.showAlert(title: nil,
+////                                     message: error.localizedDescription)
+////            }
+////        }
+//    }
 
 }

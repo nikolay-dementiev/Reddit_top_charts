@@ -15,9 +15,23 @@ struct TopChartsResponseChildListingData: Codable {
     var previewImagesSourceUrl: String? {
         preview?.images?.first?.source?.url
     }
-    let createdUtc: Float?
-    let numComments: Int?
+    let created_utc: Date?
+    let num_comments: Int?
     private let preview: TopChartsResponseListingPreview?
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        title = try values.decodeIfPresent(String.self, forKey: .title)
+        author = try values.decodeIfPresent(String.self, forKey: .author)
+        thumbnail = try values.decodeIfPresent(String.self, forKey: .thumbnail)
+        if let dateTemp = try values.decodeIfPresent(Double.self, forKey: .created_utc) {
+            created_utc = Date(timeIntervalSince1970: dateTemp)
+        } else {
+            created_utc = nil
+        }
+        num_comments = try values.decodeIfPresent(Int.self, forKey: .num_comments)
+        preview = try values.decodeIfPresent(TopChartsResponseListingPreview.self, forKey: .preview)
+    }
 }
 
 private struct TopChartsResponseListingPreview: Codable {

@@ -53,6 +53,8 @@
 		2F8FC485249A62B800D3C80D /* TopChartsResponseListingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC484249A62B800D3C80D /* TopChartsResponseListingData.swift */; };
 		2F8FC487249A641B00D3C80D /* TopChartsResponseChildenItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC486249A641B00D3C80D /* TopChartsResponseChildenItem.swift */; };
 		2F8FC489249A64DE00D3C80D /* TopChartsResponseChildListingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC488249A64DE00D3C80D /* TopChartsResponseChildListingData.swift */; };
+		2F8FC48E249B5E9200D3C80D /* InitialFlowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC48D249B5E9200D3C80D /* InitialFlowDelegate.swift */; };
+		2F8FC490249B6FDF00D3C80D /* Date+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC48F249B6FDF00D3C80D /* Date+Additions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,8 @@
 		2F8FC484249A62B800D3C80D /* TopChartsResponseListingData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopChartsResponseListingData.swift; sourceTree = "<group>"; };
 		2F8FC486249A641B00D3C80D /* TopChartsResponseChildenItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChartsResponseChildenItem.swift; sourceTree = "<group>"; };
 		2F8FC488249A64DE00D3C80D /* TopChartsResponseChildListingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopChartsResponseChildListingData.swift; sourceTree = "<group>"; };
+		2F8FC48D249B5E9200D3C80D /* InitialFlowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialFlowDelegate.swift; sourceTree = "<group>"; };
+		2F8FC48F249B6FDF00D3C80D /* Date+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Additions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				2F8FC4302498A57C00D3C80D /* InitialPresenter.swift */,
+				2F8FC48D249B5E9200D3C80D /* InitialFlowDelegate.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -298,6 +303,7 @@
 				2F8FC4422498A8D100D3C80D /* UIViewController+Additions.swift */,
 				2F8FC4442498A90900D3C80D /* UILabel+Additions.swift */,
 				2F8FC47C249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift */,
+				2F8FC48F249B6FDF00D3C80D /* Date+Additions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -535,6 +541,7 @@
 				2F8FC47D249A3B3F00D3C80D /* UIActivityIndicator+Additions.swift in Sources */,
 				2F8FC46B2499031E00D3C80D /* Request.swift in Sources */,
 				2F8FC489249A64DE00D3C80D /* TopChartsResponseChildListingData.swift in Sources */,
+				2F8FC48E249B5E9200D3C80D /* InitialFlowDelegate.swift in Sources */,
 				2F8FC4502498AA7600D3C80D /* ActivityIndicator.swift in Sources */,
 				2F8FC47B249A3A3700D3C80D /* UpdateCell.swift in Sources */,
 				2F8FC42F2498A4F000D3C80D /* InitialViewController.swift in Sources */,
@@ -565,6 +572,7 @@
 				2F8FC41F2498A1F600D3C80D /* Navigator.swift in Sources */,
 				2F8FC487249A641B00D3C80D /* TopChartsResponseChildenItem.swift in Sources */,
 				2F8FC4232498A26C00D3C80D /* BaseViewController.swift in Sources */,
+				2F8FC490249B6FDF00D3C80D /* Date+Additions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

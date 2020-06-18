@@ -33,9 +33,8 @@ final class InitialCoordinator {
 //    }
 
     private func styleRootVC(_ rootVC: UINavigationController) {
-//        rootVC.navigationBar.tintColor = .headlineColor
-//        rootVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.textColor]
-
+        rootVC.navigationBar.tintColor = .headlineColor
+        rootVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.textColor]
     }
 }
 

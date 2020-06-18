@@ -11,7 +11,7 @@ import Foundation
 //typealias ListForecastItem = FiveDaysForecastResponseItem.ListForecastResponseItem
 
 class TopService {
-    typealias TopServiceCompletion = (Result<TopChartsResponseListingData?>) -> ()
+    typealias TopServiceCompletion = (Result<TopChartsResponseListingData?, Error>) -> ()
 
     // MARK: - Private Props
     private var networkService = NetworkService()
@@ -24,7 +24,7 @@ class TopService {
                               endpoint: EndPoint.top,
                               params: params.toJson)
 
-        networkService.execute(request) { (result: Result<TopChartsResponseItem>) in
+        networkService.execute(request) { (result: Result<TopChartsResponseItem, Error>) in
             switch result {
             case .success(let response):
                 completion(.success(response.data))

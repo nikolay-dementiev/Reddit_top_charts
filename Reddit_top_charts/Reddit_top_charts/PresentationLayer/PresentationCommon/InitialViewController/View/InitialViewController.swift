@@ -35,9 +35,11 @@ class InitialViewController: BaseViewController {
     var output: InitialViewOutput?
 
     // MARK: - Private Props
-    private var dataSource: [Any] = [] {
+    private var dataSource: TopChartsResponseListingData? {
         didSet {
-            tableView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
     }
     
@@ -76,7 +78,7 @@ class InitialViewController: BaseViewController {
         self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
         loadData { [weak self] in
-            DispatchQueue.main.async() {
+            DispatchQueue.main.async {
                 self?.pullControl.endRefreshing()
             }
         }
@@ -98,13 +100,19 @@ class InitialViewController: BaseViewController {
     // Load data in the tableView
     private func loadData(completion: (() -> Void)?) {
         
-        output?.loadData(after: nil, completion: completion)
+        output?.loadData(after: nil,
+                         count: dataSource?.children?.count,
+                         completion: completion)
     }
     
     // Load data in the tableView
     private func loadNextPortion() {
-    
-        output?.loadData(after: nil, completion: nil)
+
+        guard let after = dataSource?.after else { return }
+        
+        output?.loadData(after: after,
+                         count: dataSource?.children?.count,
+                         completion: nil)
     }
 }
 
@@ -117,8 +125,10 @@ extension InitialViewController: InitialViewInput {
 //        updateSearchButtonState()
 //    }
     
-    func renderTopChartsData(_ data: [Any]) {
+    func renderTopChartsData(_ data: TopChartsResponseListingData?,
+                             completion: (() -> Void)? = nil) {
         dataSource = data
+        completion?()
     }
 
 //    private func setupSearchViewStyle() {
@@ -167,7 +177,7 @@ extension InitialViewController: InitialViewInput {
 extension InitialViewController: UITableViewDataSource {
 
 //    func numberOfSections(in tableView: UITableView) -> Int {
-//        return dataSource.count
+//        return dataSource?.children?.count ?? 0 > 0 ? 1 : 0
 //    }
 
 //    func tableView(_ tableView: UITableView,
@@ -179,14 +189,15 @@ extension InitialViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
 
-        return dataSource.count
+        return dataSource?.children?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: TopCell.defaultReuseIdentifier, for: indexPath) as! TopCell
-        cell.renderTopData(dataSource[indexPath.section])
+        let cell = tableView.dequeueReusableCell(withIdentifier: TopCell.defaultReuseIdentifier,
+                                                 for: indexPath) as! TopCell
+        cell.renderTopData(dataSource?.children?[indexPath.row].data)
 
         return cell
     }

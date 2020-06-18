@@ -9,16 +9,16 @@
 import UIKit
 
 final class TopCell: UITableViewCell {
-    @IBOutlet weak private var authorLabel: UILabel!
-    @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var nCommentsLabel: UILabel!
-    @IBOutlet weak private var thumbnailImageView: UIImageView!
-    @IBOutlet weak private var thumbnailSpinner: UIActivityIndicatorView!
+    @IBOutlet private weak var authorLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var nCommentsLabel: UILabel!
+    @IBOutlet private weak var thumbnailImageView: UIImageView!
+    @IBOutlet private weak var thumbnailSpinner: UIActivityIndicatorView!
     lazy private var downloader = ImageDownloader()
     
     // MARK: - Private Props
 
-     private var dataSource: Any? {
+    private var dataSource: TopChartsResponseChildListingData? {
         didSet {
             fullFillCell()
         }
@@ -50,14 +50,28 @@ final class TopCell: UITableViewCell {
         dataSource = forecastData
     }
  */
-    func renderTopData(_ data: Any?) {
+    func renderTopData(_ data: TopChartsResponseChildListingData?) {
         dataSource = data
     }
 
     // MARK: - Private API
     private func fullFillCell() {
-//        guard let dataSource = dataSource else { return }
-//
+        guard let dataSource = dataSource else { return }
+
+        authorLabel.text = String(format: "%@%@", dataSource.author ?? "",
+                                  String (format: dataSource.created_utc != nil ? " - %@" : "",
+                                          dataSource.created_utc?.timeAgoDisplay() ?? ""))
+        
+        titleLabel.text = dataSource.title
+        nCommentsLabel.text = String(format: "%@: %@",
+                                     "NumberOfComments".localized,
+                                     dataSource.num_comments?.description ?? "")
+        
+        if let thumbnailImageUrl = dataSource.previewImagesSourceUrl {
+            downloadMedia(thumbnailImageUrl)
+        }
+        
+        
 //        var temperatureLabelText = ""
 //        if let temperature = dataSource.temperature {
 //            temperatureLabelText = temperature.description
@@ -94,13 +108,23 @@ final class TopCell: UITableViewCell {
         guard let url = URL(string: url) else { return }
         thumbnailSpinner.startAnimating()
         downloader.downloadImage(from: url) { [weak self] result in
+            
             DispatchQueue.main.async {
                 self?.thumbnailSpinner.stopAnimating()
             }
-
-            if case let .success(image) = result {
-                self?.setMedia(image)
+            
+            switch result {
+            case  .success(let imageWithUrl):
+                guard imageWithUrl.url == url else { return }
+                
+                self?.setMedia(imageWithUrl.image)
+            case .failure(let error):
+                print(error.localizedDescription)
             }
+
+//            if case let .success(image) = result.image {
+//                self?.setMedia(image)
+//            }
         }
     }
 

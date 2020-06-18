@@ -12,13 +12,12 @@ final class InitialPresenter {
     }
     // MARK: - Props
     weak var view: InitialViewInput!
-//    weak var flowDelegate: FiveDaysForecastFlowDelegate?
+//    weak var flowDelegate: InitialFlowDelegate?
 
     // MARK: - Private Props
     private let restService = TopService()
 
 }
-
 
 extension InitialPresenter: InitialViewOutput {
     func viewIsReady() {
@@ -26,19 +25,22 @@ extension InitialPresenter: InitialViewOutput {
     }
 
     func loadData(after: String? = nil,
+                  count: Int? = nil,
                   completion: (() -> Void)? = nil) {
         view.startAnimate()
         let params = TopRequestParams(limit: Settings.limitForDataFetching,
                                       after: after,
-                                      count: nil)
+                                      count: count)
         
         restService.getTopCharts(with: params) { [weak self] (result) in
             self?.view.stopAnimate()
             
             switch result {
             case .success(let items):
-                break
-//                self?.flowDelegate?.didReceiveFiveDaysForecast(items)
+                self?.view.renderTopChartsData(items,
+                                               completion: completion)
+//                self?.flowDelegate?.didReceiveData(items, completion: completion)
+                
             case .failure(let error):
                 self?.view.showAlert(title: nil,
                                      message: error.localizedDescription)

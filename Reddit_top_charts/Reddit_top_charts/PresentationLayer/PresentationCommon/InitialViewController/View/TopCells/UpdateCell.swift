@@ -9,7 +9,7 @@
 import UIKit
 
 final class UpdateCell: UITableViewCell {
-    @IBOutlet weak private var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
     
     override func prepareForInterfaceBuilder() {
         setupStyles()

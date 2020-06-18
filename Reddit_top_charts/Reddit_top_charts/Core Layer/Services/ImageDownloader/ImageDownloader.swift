@@ -8,9 +8,14 @@
 
 import UIKit
 
-typealias DownloadCompletion = (Result<UIImage>) -> Void
+typealias DownloadCompletion = (Result<ImageWithUrl,Error>) -> Void
 
-class ImageDownloader {
+struct ImageWithUrl {
+    let image: UIImage
+    let url: URL
+}
+
+final class ImageDownloader {
     static let defaultSession = ImageDownloader.makeDefaultSession()
 
     private var completion: DownloadCompletion?
@@ -22,7 +27,7 @@ class ImageDownloader {
         self.completion = completion
 
         if let image = ImageCache.shared[url] {
-            completion(.success(image))
+            completion(.success(ImageWithUrl(image: image, url: url)))
             return
         }
 
@@ -30,7 +35,7 @@ class ImageDownloader {
             AppService.shared.showNetworkActivity = false
             if error == nil {
                 if let data = data, let image = UIImage(data: data) {
-                    completion(.success(image))
+                    completion(.success(ImageWithUrl(image: image, url: url)))
                     ImageCache.shared[url] = image
                 } else {
                     completion(.failure(NetworkError.common("Image failed to decode")))

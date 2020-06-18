@@ -15,9 +15,10 @@ final class TopCell: UITableViewCell {
     @IBOutlet private weak var thumbnailImageView: UIImageView!
     @IBOutlet private weak var thumbnailSpinner: UIActivityIndicatorView!
     lazy private var downloader = ImageDownloader()
+    weak var delegate: TopCellProtocol?
+    private let tapThumbnailImageViewRecognizer = UITapGestureRecognizer()
     
     // MARK: - Private Props
-
     private var dataSource: TopChartsResponseChildListingData? {
         didSet {
             fullFillCell()
@@ -25,31 +26,21 @@ final class TopCell: UITableViewCell {
     }
 
     override func prepareForInterfaceBuilder() {
-        setupStyles()
+        setupInitialAppearence()
     }
     
     // MARK: - API
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupStyles()
+        setupInitialAppearence()
     }
-
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//
-//    }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         downloader.cancelDownload()
         thumbnailImageView.image = nil
     }
 
-    /*
-    func renderForecast(_ forecastData: ForecastItemDTO?) {
-        dataSource = forecastData
-    }
- */
     func renderTopData(_ data: TopChartsResponseChildListingData?) {
         dataSource = data
     }
@@ -70,23 +61,12 @@ final class TopCell: UITableViewCell {
         if let thumbnailImageUrl = dataSource.previewImagesSourceUrl {
             downloadMedia(thumbnailImageUrl)
         }
-        
-        
-//        var temperatureLabelText = ""
-//        if let temperature = dataSource.temperature {
-//            temperatureLabelText = temperature.description
-//        }
-//        temperatureLabel.text = "\("TemperatureTitle".localized) \(temperatureLabelText)\("TemperatureGradUnit".localized)"
-//
-//        let timeLabelText = dataSource.date?.getHour() ?? ""
-//        timeLabel.text = "\("TimeTitle".localized) \(timeLabelText)\("TimeHourUnit".localized)"
-//
-//        if let iconWeather = dataSource.iconWeatherURL {
-//            downloadMedia(iconWeather)
-//        }
     }
 
-    private func setupStyles() {
+    private func setupInitialAppearence() {
+        tapThumbnailImageViewRecognizer.addTarget(self, action: #selector(tapOnThumbnailImageView))
+        thumbnailImageView.addGestureRecognizer(tapThumbnailImageViewRecognizer)
+        
         thumbnailImageView.layer.cornerRadius = 8
         thumbnailImageView.layer.borderWidth = 1
         thumbnailImageView.layer.borderColor = UIColor.lightGray.cgColor
@@ -106,25 +86,20 @@ final class TopCell: UITableViewCell {
 
     private func downloadMedia(_ url: String) {
         guard let url = URL(string: url) else { return }
+        setMedia(UIImage(named: "ImagePlaceholder")!)
+        
         thumbnailSpinner.startAnimating()
         downloader.downloadImage(from: url) { [weak self] result in
-            
-            DispatchQueue.main.async {
-                self?.thumbnailSpinner.stopAnimating()
-            }
-            
             switch result {
             case  .success(let imageWithUrl):
                 guard imageWithUrl.url == url else { return }
-                
+                DispatchQueue.main.async {
+                    self?.thumbnailSpinner.stopAnimating()
+                }
                 self?.setMedia(imageWithUrl.image)
             case .failure(let error):
                 print(error.localizedDescription)
             }
-
-//            if case let .success(image) = result.image {
-//                self?.setMedia(image)
-//            }
         }
     }
 
@@ -132,5 +107,12 @@ final class TopCell: UITableViewCell {
         DispatchQueue.main.async {
             self.thumbnailImageView.image = image
         }
+    }
+    
+    @objc
+    private func tapOnThumbnailImageView() {
+        guard let urlString = dataSource?.previewImagesSourceUrl else { return }
+        
+        delegate?.thumbnailTappedAction(urlString: urlString)
     }
 }

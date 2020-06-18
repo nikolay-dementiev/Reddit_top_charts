@@ -21,16 +21,21 @@ final class InitialCoordinator {
     // MARK: - Private API
     private func startInitialVC() {
         let presenter = InitialPresenter()
-//        presenter.flowDelegate = self
+        presenter.flowDelegate = self
         let vc = ViewControllerFactory.makeInitialViewController(with: presenter)
         navigator.navigate(to: vc, transition: .root)
     }
+    
+    private func startWebViewController(withUrlString urlString: String?) {
+        let presenter = WebViewPresenter(urlString: urlString)
+        let vc = ViewControllerFactory.makeWebViewViewController(with: presenter)
 
-//    private func startForecastDataVC(_ items: [ListForecastItem]) {
-//        let presenter = ForecastDataPresenter(with: items)
-//        let vc = ViewControllerFactory.makeForecastDataPresenterViewController(with: presenter)
-//        navigator.navigate(to: vc, transition: .push)
-//    }
+        let newestNavigationController = UINavigationController(rootViewController: vc)
+        
+        navigator.navigate(to: newestNavigationController, transition: .modal) { [weak presenter] in
+          presenter?.view.renderImageData(fromUrlString: urlString)
+        }
+    }
 
     private func styleRootVC(_ rootVC: UINavigationController) {
         rootVC.navigationBar.tintColor = .headlineColor
@@ -44,11 +49,8 @@ extension InitialCoordinator: Coordinator {
     }
 }
 
-
-//extension InitialCoordinator: FiveDaysForecastFlowDelegate {
-//    func didReceiveFiveDaysForecast(_ items: [ListForecastItem]) {
-//        DispatchQueue.main.async {
-//            self.startForecastDataVC(items)
-//        }
-//    }
-//}
+extension InitialCoordinator: InitialFlowDelegate {
+    func openImageUrlInWebView(urlString: String?) {
+        startWebViewController(withUrlString: urlString)
+    }
+}

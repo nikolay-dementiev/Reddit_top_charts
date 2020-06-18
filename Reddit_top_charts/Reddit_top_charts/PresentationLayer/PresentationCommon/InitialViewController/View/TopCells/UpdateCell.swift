@@ -20,6 +20,10 @@ final class UpdateCell: UITableViewCell {
         super.awakeFromNib()
         setupStyles()
         
+        animateSpinner()
+    }
+    
+    func animateSpinner() {
         spinner.startAnimating()
     }
     

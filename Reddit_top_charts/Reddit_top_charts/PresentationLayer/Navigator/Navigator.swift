@@ -20,14 +20,16 @@ final class Navigator {
         self.navigationController = navigationController
     }
 
-    func navigate(to destination: UIViewController, transition: TransitionType) {
+    func navigate(to destination: UIViewController,
+                  transition: TransitionType,
+                  completion: (() -> Void)? = nil) {
         switch transition {
         case .root:
             navigationController.setViewControllers([destination], animated: false)
         case .push:
             navigationController.pushViewController(destination, animated: true)
         case .modal:
-            navigationController.present(destination, animated: true, completion: nil)
+            navigationController.present(destination, animated: true, completion: completion)
         }
     }
 }

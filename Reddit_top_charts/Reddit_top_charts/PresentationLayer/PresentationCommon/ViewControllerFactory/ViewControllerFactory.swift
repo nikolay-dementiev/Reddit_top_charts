@@ -16,11 +16,11 @@ final class ViewControllerFactory {
         presenter.view = vc
         return vc
     }
-
-//    static func makeForecastDataPresenterViewController(with presenter: ForecastDataPresenter) -> UIViewController {
-//        let vc: ForecastDataPresenterViewController = Storyboard.main.instantiateViewController()
-//        vc.output = presenter
-//        presenter.view = vc
-//        return vc
-//    }
+    
+    static func makeWebViewViewController(with presenter: WebViewPresenter?) -> UIViewController {
+        let vc: WebViewController = Storyboard.main.instantiateViewController()
+        vc.output = presenter
+        presenter?.view = vc
+        return vc
+    }
 }

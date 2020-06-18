@@ -15,10 +15,10 @@ private extension Selector {
 class InitialViewController: BaseViewController {
 
     private enum Settings {
-        static let shortAnimationDuration: TimeInterval = 0.25
-        static let longAnimationDuration: TimeInterval = 0.5
-        static let defaultCornerRadius: CGFloat = 4
-        static let defaultCountryName = "Kiev,UA"
+//        static let shortAnimationDuration: TimeInterval = 0.25
+//        static let longAnimationDuration: TimeInterval = 0.5
+//        static let defaultCornerRadius: CGFloat = 4
+//        static let defaultCountryName = "Kiev,UA"
     }
 
     // MARK: - Props
@@ -46,7 +46,7 @@ class InitialViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupDefaultData()
+        setupDefaultAppearence()
         output?.viewIsReady()
     }
 
@@ -86,28 +86,26 @@ class InitialViewController: BaseViewController {
 
     // MARK: - Private API
 
-    private func setupDefaultData() {
+    private func setupDefaultAppearence() {
         title = "TopChartsCollectionVCTitle".localized
         
         pullControl.attributedTitle = NSAttributedString(string: "PullToRefreshTitle".localized)
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
         tableView.refreshControl = pullControl
+        pullControl.tintColor = .spinnerColor
         
         tableView.estimatedRowHeight = 120
         tableView.rowHeight = UITableView.automaticDimension
     }
     
-    // Load data in the tableView
+    // MARK: Load data from API
     private func loadData(completion: (() -> Void)?) {
-        
         output?.loadData(after: nil,
                          count: dataSource?.children?.count,
                          completion: completion)
     }
     
-    // Load data in the tableView
     private func loadNextPortion() {
-
         guard let after = dataSource?.after else { return }
         
         output?.loadData(after: after,
@@ -119,72 +117,22 @@ class InitialViewController: BaseViewController {
 // MARK: - Extensions
 
 extension InitialViewController: InitialViewInput {
-
-//    func setupInitialState() {
-//        setupSearchViewStyle()
-//        updateSearchButtonState()
-//    }
     
     func renderTopChartsData(_ data: TopChartsResponseListingData?,
+                             after: String? = nil,
                              completion: (() -> Void)? = nil) {
-        dataSource = data
+        var dataForUpdate = data
+        if after != nil,
+            let currentChildren = dataSource?.children {
+            dataForUpdate?.children?.insert(contentsOf: currentChildren, at: 0)
+        }
+        dataSource = dataForUpdate
         completion?()
     }
-
-//    private func setupSearchViewStyle() {
-//
-////        applyStyle(font: .smallFont,
-////                   textColor: .textColor,
-////                   to: searchTitleLabel)
-////
-////        searchTextField
-////            .font(.titleFont)
-////            .textColor(.textColor)
-////
-////        getDataButton
-////            .cornerRadius(Settings.defaultCornerRadius)
-////            .backgroundColor(.headlineColor)
-////            .titleColor(.white, for: .normal)
-////            .font(.smallFont)
-//    }
-//
-//    private func updateSearchButtonState() {
-////        getDataButton.isEnabled = isValidCountryName
-////        UIView.animate(withDuration: Settings.shortAnimationDuration) {
-////            self.getDataButton.alpha = self.getDataButton.isEnabled ? 1.0 : 0.5
-////        }
-//    }
 }
-
-//extension InitialViewController: UITextFieldDelegate {
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
-//        return true
-//    }
-//}
-
-//extension InitialViewController: KeyboardProtocol {
-//    func keyboardWillShow(notification: Notification) {
-//        view.addGestureRecognizer(tapRecognizer)
-//    }
-//
-//    func keyboardWillHide(notification: Notification) {
-//        view.removeGestureRecognizer(tapRecognizer)
-//    }
-//}
 
 //MARK: - UITableViewDataSource
 extension InitialViewController: UITableViewDataSource {
-
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return dataSource?.children?.count ?? 0 > 0 ? 1 : 0
-//    }
-
-//    func tableView(_ tableView: UITableView,
-//                   titleForHeaderInSection section: Int) -> String? {
-//
-//        return dataSource[section].date?.formatForCellSection()
-//    }
 
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
@@ -195,9 +143,20 @@ extension InitialViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
+        guard let dataSourceTemp = dataSource,
+            dataSourceTemp.after != nil,
+            let children = dataSourceTemp.children,
+            indexPath.row < children.count - 1 else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: UpdateCell.defaultReuseIdentifier,
+                                                         for: indexPath) as! UpdateCell
+                cell.animateSpinner()
+                return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: TopCell.defaultReuseIdentifier,
                                                  for: indexPath) as! TopCell
-        cell.renderTopData(dataSource?.children?[indexPath.row].data)
+        cell.delegate = self
+        cell.renderTopData(children[indexPath.row].data)
 
         return cell
     }
@@ -206,9 +165,17 @@ extension InitialViewController: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 extension InitialViewController: UITableViewDelegate {
 
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//
-//        return Settings.cellItemHeigh
-//    }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if cell is UpdateCell {
+            loadNextPortion()
+        }
+    }
 }
 
+//MARK: - TopCellDelegate
+extension InitialViewController: TopCellProtocol {
+    
+    func thumbnailTappedAction(urlString: String?) {
+        output?.openImageUrlInWebView(urlString: urlString)
+    }
+}

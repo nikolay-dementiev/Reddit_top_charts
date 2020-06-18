@@ -15,12 +15,25 @@ struct ImageWithUrl {
     let url: URL
 }
 
-final class ImageDownloader {
+class BaseImageDownloader {
+    var session = URLSession.shared
+    var currentTask: URLSessionDataTask?
+    
+    func cancelDownload() {
+        currentTask?.cancel()
+    }
+
+    // MARK: - Private API
+    class func makeDefaultSession() -> URLSession {
+        let configuration = URLSessionConfiguration.ephemeral
+        return URLSession(configuration: configuration)
+    }
+}
+
+final class ImageDownloader: BaseImageDownloader {
     static let defaultSession = ImageDownloader.makeDefaultSession()
 
     private var completion: DownloadCompletion?
-    private var session = URLSession.shared
-    private var currentTask: URLSessionDataTask?
 
     // MARK: - API
     func downloadImage(from url: URL, completion: @escaping DownloadCompletion) {
@@ -48,15 +61,9 @@ final class ImageDownloader {
         AppService.shared.showNetworkActivity = true
         currentTask?.resume()
     }
-
-    func cancelDownload() {
+    
+    override func cancelDownload() {
+        super.cancelDownload()
         self.completion = nil
-        currentTask?.cancel()
-    }
-
-    // MARK: - Private API
-    static private func makeDefaultSession() -> URLSession {
-        let configuration = URLSessionConfiguration.ephemeral
-        return URLSession(configuration: configuration)
     }
 }

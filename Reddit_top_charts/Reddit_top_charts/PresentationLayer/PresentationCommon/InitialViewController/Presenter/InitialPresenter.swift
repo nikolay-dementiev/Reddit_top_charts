@@ -12,7 +12,7 @@ final class InitialPresenter {
     }
     // MARK: - Props
     weak var view: InitialViewInput!
-//    weak var flowDelegate: InitialFlowDelegate?
+    weak var flowDelegate: InitialFlowDelegate?
 
     // MARK: - Private Props
     private let restService = TopService()
@@ -38,6 +38,7 @@ extension InitialPresenter: InitialViewOutput {
             switch result {
             case .success(let items):
                 self?.view.renderTopChartsData(items,
+                                               after: after,
                                                completion: completion)
 //                self?.flowDelegate?.didReceiveData(items, completion: completion)
                 
@@ -46,7 +47,10 @@ extension InitialPresenter: InitialViewOutput {
                                      message: error.localizedDescription)
             }
         }
-        
+    }
+    
+    func openImageUrlInWebView(urlString: String?) {
+        flowDelegate?.openImageUrlInWebView(urlString: urlString)
     }
     
 //    func didSearchAction(for code: String?) {

@@ -9,6 +9,7 @@
 protocol InitialViewInput: class, AlertPresentable, ActivityIndicator {
     func setupInitialState()
     func renderTopChartsData(_ data: TopChartsResponseListingData?,
+                             after: String?,
                              completion: (() -> Void)?)
 }
 
@@ -18,8 +19,14 @@ protocol InitialViewOutput: class {
                   count: Int?,
                   completion: (() -> Void)?)
     //    func didSearchAction(for code: String?)
+    func openImageUrlInWebView(urlString: String?)
 }
 
 extension InitialViewInput {
     func setupInitialState() {}
+}
+
+
+protocol TopCellProtocol: class {
+    func thumbnailTappedAction(urlString: String?)
 }

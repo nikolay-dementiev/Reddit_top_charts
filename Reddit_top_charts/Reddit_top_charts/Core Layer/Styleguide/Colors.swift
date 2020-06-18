@@ -13,4 +13,5 @@ extension UIColor {
     static let textColor = #colorLiteral(red: 0.3254901961, green: 0.3254901961, blue: 0.3254901961, alpha: 1)
     static let fieldBackgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9215686275, blue: 0.9450980392, alpha: 1)
     static let spinnerColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+    static let barItemColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
 }

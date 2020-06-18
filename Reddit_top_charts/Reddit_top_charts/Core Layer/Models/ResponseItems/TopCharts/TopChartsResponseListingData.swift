@@ -6,7 +6,7 @@ import Foundation
 struct TopChartsResponseListingData: Codable {
 	let after: String?
 	let before: String?
-	let children: [TopChartsResponseChildenItem]?
+	var children: [TopChartsResponseChildenItem]?
 	let dist: Int?
 	let modhash: String?
 }

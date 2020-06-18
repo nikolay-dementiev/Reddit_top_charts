@@ -9,3 +9,7 @@
 protocol Coordinator: class {
     func start()
 }
+
+protocol WebCoordinator: class {
+    func start(withUrlString: String?)
+}

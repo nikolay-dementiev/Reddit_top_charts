@@ -9,12 +9,12 @@
 import Foundation
 
 class NetworkService: NetworkServiceProtocol {
-    //MARK: - Props
+    //MARK: Props
     var configuration: ServerConfig
     var headers: HeadersDict
     var client = NetworkClient(urlSession: .shared)
 
-    // MARK: - Initialization
+    // MARK: Initialization
     convenience init() {
         self.init(ServerConfig.defaultConfig())
     }
@@ -24,7 +24,7 @@ class NetworkService: NetworkServiceProtocol {
         self.headers = self.configuration.headers // fillup with initial headers
     }
 
-    // MARK: - API
+    // MARK: API
     func execute<Response>(_ request: RequestProtocol,
                            completion: @escaping (_ result: Result<Response, Error>) -> ()) where Response: Codable {
         do {

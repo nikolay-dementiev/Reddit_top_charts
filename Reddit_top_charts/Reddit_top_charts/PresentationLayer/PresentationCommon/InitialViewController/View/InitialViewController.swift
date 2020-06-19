@@ -8,38 +8,26 @@
 
 import UIKit
 
-private extension Selector {
-    static let handleTap = #selector(InitialViewController.handleTap(_:))
-}
-
 class InitialViewController: BaseViewController {
 
     private enum Settings {
-//        static let shortAnimationDuration: TimeInterval = 0.25
-//        static let longAnimationDuration: TimeInterval = 0.5
-//        static let defaultCornerRadius: CGFloat = 4
-//        static let defaultCountryName = "Kiev,UA"
+        static let restorationIdentifier = "InitialViewController"
+        static let topChartsCollectionVCTitle = "TopChartsCollectionVCTitle"
+        static let pullToRefreshTitle = "PullToRefreshTitle"
     }
 
-    // MARK: - Props
-    private var pullControl = UIRefreshControl()
-    
+    // MARK: Props
     @IBOutlet private weak var tableView: UITableView!
     
-//    @IBOutlet weak private var searchTitleLabel: UILabel!
-//    @IBOutlet weak private var searchTextField: UITextField!
-//    @IBOutlet weak private var getDataButton: UIButton!
-//    var isValidCountryName: Bool { return Validator.isValidCityName(searchTextField.text) }
- //   private lazy var tapRecognizer = makeTapGestureRecognizer()
-
     var output: InitialViewOutput?
+    var preservingData: InitialPreserveDataForState?
 
-    // MARK: - Private Props
-    private var dataSource: TopChartsResponseListingData? {
+    // MARK: Private Props
+    private var pullControl = UIRefreshControl()
+    private typealias TopChartsResponseListingDataType = TopChartsResponseListingData
+    private var dataSource: TopChartsResponseListingDataType? {
         didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.tableView.reloadData()
-            }
+            tableView.reloadData()
         }
     }
     
@@ -56,24 +44,13 @@ class InitialViewController: BaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        addKeyboardObserver()
-
-//        navigationController?.isNavigationBarHidden = true
     }
 
     @objc fileprivate func handleTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 
-    // MARK: - Actions
-//    @IBAction private func searchAction(_ sender: Any) {
-////        output.didSearchAction(for: searchTextField.text)
-//    }
-
-//    @IBAction func searchFieldEditingChanged(_ sender: Any) {
-//        updateSearchButtonState()
-//    }
-    
+    // MARK: Actions
     @objc private func refreshListData(_ sender: Any) {
         self.pullControl.endRefreshing() // You can stop after API Call
         // Call API
@@ -84,22 +61,23 @@ class InitialViewController: BaseViewController {
         }
     }
 
-    // MARK: - Private API
-
+    // MARK: Private API
     private func setupDefaultAppearence() {
-        title = "TopChartsCollectionVCTitle".localized
+        title = Settings.topChartsCollectionVCTitle.localized
         
-        pullControl.attributedTitle = NSAttributedString(string: "PullToRefreshTitle".localized)
+        pullControl.attributedTitle = NSAttributedString(string: Settings.pullToRefreshTitle.localized)
         pullControl.addTarget(self, action: #selector(refreshListData(_:)), for: .valueChanged)
-        tableView.refreshControl = pullControl
         pullControl.tintColor = .spinnerColor
         
+        tableView.refreshControl = pullControl
         tableView.estimatedRowHeight = 120
         tableView.rowHeight = UITableView.automaticDimension
+        
+        restorationIdentifier = Settings.restorationIdentifier
     }
     
     // MARK: Load data from API
-    private func loadData(completion: (() -> Void)?) {
+    private func loadData(completion: (() -> Void)? = nil) {
         output?.loadData(after: nil,
                          count: dataSource?.children?.count,
                          completion: completion)
@@ -118,6 +96,10 @@ class InitialViewController: BaseViewController {
 
 extension InitialViewController: InitialViewInput {
     
+    func fetchInitialDataPortion() {
+        loadData()
+    }
+    
     func renderTopChartsData(_ data: TopChartsResponseListingData?,
                              after: String? = nil,
                              completion: (() -> Void)? = nil) {
@@ -126,7 +108,9 @@ extension InitialViewController: InitialViewInput {
             let currentChildren = dataSource?.children {
             dataForUpdate?.children?.insert(contentsOf: currentChildren, at: 0)
         }
-        dataSource = dataForUpdate
+        DispatchQueue.main.async { [weak self] in
+            self?.dataSource = dataForUpdate
+        }
         completion?()
     }
 }
@@ -178,4 +162,32 @@ extension InitialViewController: TopCellProtocol {
     func thumbnailTappedAction(urlString: String?) {
         output?.openImageUrlInWebView(urlString: urlString)
     }
+}
+
+//MARK: - Preserving State
+extension InitialViewController {
+    
+    override func encodeRestorableState(with coder: NSCoder) {
+        super.encodeRestorableState(with: coder)
+        
+        preservingData?.encodeRestorableState(with: coder,
+                                      data: SaveRestoreStateDataInitialVcDTO(dataSource: dataSource))
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        super.decodeRestorableState(with: coder)
+
+        if let data = preservingData?.decodeRestorableState(with: coder) {
+            if let dataSource = data.dataSource {
+                self.dataSource = dataSource
+            }
+        } else {
+            fetchInitialDataPortion()
+        }
+    }
+}
+
+//MARK: - CTA Activity
+private extension Selector {
+    static let handleTap = #selector(InitialViewController.handleTap(_:))
 }

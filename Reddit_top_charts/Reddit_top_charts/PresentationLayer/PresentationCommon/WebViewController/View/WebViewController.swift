@@ -11,10 +11,29 @@ import WebKit
 
 class WebViewController: BaseViewController {
 
-    @IBOutlet private weak var webView: WKWebView!
+    private enum Settings {
+        static let dataSourceUrlStringKey = "dataSourceUrlString"
+        static let restorationIdentifier = "WebViewController"
+        static let imagePreviewVCTitle = "ImagePreviewVCTitle"
+    }
     
-    private var dataSourceUrlString: String?
+    // MARK: Props
+    @IBOutlet private weak var webView: WKWebView!
+    var preservingData: WebViewPreserveDataForState?
     var output: WebViewControllerOutput?
+    
+    // MARK: Private Props
+    private var dataSourceUrlString: String? {
+        didSet {
+            if let dataSourceUrlString = dataSourceUrlString,
+                let url = URL(string: dataSourceUrlString) {
+                
+                let myRequest = URLRequest(url: url)
+                webView.load(myRequest)
+                self.startAnimate()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,12 +46,11 @@ class WebViewController: BaseViewController {
         output?.cancelDownload()
     }
     
-    // MARK: - Private API
-
+    // MARK: Private API
     private func setupDefaultData() {
         webView.navigationDelegate = self
         
-        title = "ImagePreviewVCTitle".localized
+        title = Settings.imagePreviewVCTitle.localized
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save".localized,
                                                             style: .done,
                                                             target: self,
@@ -44,6 +62,9 @@ class WebViewController: BaseViewController {
         [navigationItem.rightBarButtonItem,
          navigationItem.leftBarButtonItem]
             .forEach { $0?.tintColor = .barItemColor }
+        
+        restorationIdentifier = Settings.restorationIdentifier
+        preservingData = preservingData ?? WebViewPreserveDataForState()
     }
     
     @objc
@@ -57,23 +78,38 @@ class WebViewController: BaseViewController {
     }
 }
 
+//MARK: - WKNavigationDelegate
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         self.stopAnimate()
     }
 }
 
+//MARK: - WebViewControllerInput
 extension WebViewController: WebViewControllerInput {
     
     func renderImageData(fromUrlString urlString: String?) {
         dataSourceUrlString = urlString
+    }
+}
+
+//MARK: - Preserving State
+extension WebViewController {
+    
+    override func encodeRestorableState(with coder: NSCoder) {
+        super.encodeRestorableState(with: coder)
+
+        preservingData?.encodeRestorableState(with: coder,
+                                              data: SaveRestoreStateDataWebViewVcDTO(dataSourceUrlString: dataSourceUrlString))
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        super.decodeRestorableState(with: coder)
         
-        if let dataSourceUrlString = dataSourceUrlString,
-            let url = URL(string: dataSourceUrlString) {
-            
-            let myRequest = URLRequest(url: url)
-            webView.load(myRequest)
-            self.startAnimate()
+        if let data = preservingData?.decodeRestorableState(with: coder) {
+            if let dataSourceUrlString = data.dataSourceUrlString {
+                self.dataSourceUrlString = dataSourceUrlString
+            }
         }
     }
 }

@@ -6,12 +6,5 @@
 //  Copyright © 2020 test reddit. All rights reserved.
 //
 
-//enum Result<Value> {
-//    case success(Value)
-//    case failure(NetworkError)
-//}
-
-//TODO: substitude it to Swift.Result
-
 typealias HeadersDict = [String: String]
 typealias JSON = [String : Any]

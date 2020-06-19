@@ -10,7 +10,7 @@ import UIKit
 
 extension UIViewController {
 
-    // MARK: - Spinner animation
+    // MARK: Spinner animation
     func spinnerStartAnimating(spinner child: SpinnerViewController?) {
         guard let child = child else {
             return
@@ -33,7 +33,7 @@ extension UIViewController {
 
 extension UIView {
 
-    // MARK: - Spinner animation
+    // MARK: Spinner animation
     func spinnerStartAnimating(spinner child: SpinnerViewController?) {
         guard let child = child else {
             return

@@ -24,7 +24,7 @@ struct ServerConfig {
     
     private static let requiredParemeters: [String : Any] = ["raw_json": 1]
 
-    // MARK: - API
+    // MARK: API
     static func defaultConfig() -> ServerConfig {
         return ServerConfig(baseUrl: HostPath.base.rawValue,
                             headers: ServerConfig.defaultHeaders())
@@ -42,11 +42,7 @@ struct ServerConfig {
         return params
     }
 
-//    static func getImageDownloadHostPath() -> String {
-//        return HostPath.iconDownload.rawValue
-//    }
-
-    // MARK: - Private API
+    // MARK: Private API
     private static func defaultHeaders() -> HeadersDict {
         return [:]
     }

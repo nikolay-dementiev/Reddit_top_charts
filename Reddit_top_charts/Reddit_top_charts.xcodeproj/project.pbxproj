@@ -59,7 +59,11 @@
 		2F8FC497249BA00B00D3C80D /* WebViewControllerInputOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC496249BA00B00D3C80D /* WebViewControllerInputOutput.swift */; };
 		2F8FC499249BA02700D3C80D /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC498249BA02700D3C80D /* WebViewPresenter.swift */; };
 		2F8FC49C249BB4FF00D3C80D /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC49B249BB4FF00D3C80D /* PhotoManager.swift */; };
-		2F8FC49F249BBAD800D3C80D /* WebViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC49E249BBAD800D3C80D /* WebViewCoordinator.swift */; };
+		2F8FC4A3249CC26900D3C80D /* MainNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC4A2249CC26900D3C80D /* MainNavigationViewController.swift */; };
+		2F8FC4A5249CE76400D3C80D /* InitialPreserveDataForState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC4A4249CE76400D3C80D /* InitialPreserveDataForState.swift */; };
+		2F8FC4A7249CEB6A00D3C80D /* PreserveStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC4A6249CEB6A00D3C80D /* PreserveStateData.swift */; };
+		2F8FC4AA249CEBBB00D3C80D /* PreserveDataForStateBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC4A9249CEBBB00D3C80D /* PreserveDataForStateBase.swift */; };
+		2F8FC4AC249CF99800D3C80D /* WebViewPreserveDataForState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC4AB249CF99800D3C80D /* WebViewPreserveDataForState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,7 +121,11 @@
 		2F8FC496249BA00B00D3C80D /* WebViewControllerInputOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewControllerInputOutput.swift; sourceTree = "<group>"; };
 		2F8FC498249BA02700D3C80D /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		2F8FC49B249BB4FF00D3C80D /* PhotoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoManager.swift; sourceTree = "<group>"; };
-		2F8FC49E249BBAD800D3C80D /* WebViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCoordinator.swift; sourceTree = "<group>"; };
+		2F8FC4A2249CC26900D3C80D /* MainNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationViewController.swift; sourceTree = "<group>"; };
+		2F8FC4A4249CE76400D3C80D /* InitialPreserveDataForState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialPreserveDataForState.swift; sourceTree = "<group>"; };
+		2F8FC4A6249CEB6A00D3C80D /* PreserveStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreserveStateData.swift; sourceTree = "<group>"; };
+		2F8FC4A9249CEBBB00D3C80D /* PreserveDataForStateBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreserveDataForStateBase.swift; sourceTree = "<group>"; };
+		2F8FC4AB249CF99800D3C80D /* WebViewPreserveDataForState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPreserveDataForState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +188,6 @@
 			isa = PBXGroup;
 			children = (
 				2F8FC4332498A65E00D3C80D /* InitialCoordinator.swift */,
-				2F8FC49E249BBAD800D3C80D /* WebViewCoordinator.swift */,
 			);
 			path = InitializeModule;
 			sourceTree = "<group>";
@@ -227,6 +234,7 @@
 		2F8FC4202498A23D00D3C80D /* PresentationCommon */ = {
 			isa = PBXGroup;
 			children = (
+				2F8FC4A1249CC21F00D3C80D /* NavigationViewController */,
 				2F8FC4212498A25000D3C80D /* BaseViewController */,
 				2F8FC4242498A28800D3C80D /* ViewControllerFactory */,
 				2F8FC4032497AA7C00D3C80D /* Main.storyboard */,
@@ -278,6 +286,7 @@
 			children = (
 				2F8FC4302498A57C00D3C80D /* InitialPresenter.swift */,
 				2F8FC48D249B5E9200D3C80D /* InitialFlowDelegate.swift */,
+				2F8FC4A4249CE76400D3C80D /* InitialPreserveDataForState.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -320,6 +329,7 @@
 				2F8FC44B2498A9E400D3C80D /* AlertPresentable.swift */,
 				2F8FC44D2498AA4C00D3C80D /* ReusableView.swift */,
 				2F8FC44F2498AA7600D3C80D /* ActivityIndicator.swift */,
+				2F8FC4A6249CEB6A00D3C80D /* PreserveStateData.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -327,10 +337,11 @@
 		2F8FC4512498AAA500D3C80D /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				2F8FC4A8249CEBA200D3C80D /* PreserveStateData */,
 				2F8FC49A249BB4EC00D3C80D /* PhotoManager */,
 				2F8FC4562498AB6D00D3C80D /* ImageDownloader */,
 				2F8FC4572498AB7E00D3C80D /* Network Layer */,
-				2F8FC46F249904BF00D3C80D /* TopService */,
+				2F8FC46F249904BF00D3C80D /* TopAPIService */,
 				2F8FC47424990D1A00D3C80D /* AppService */,
 			);
 			path = Services;
@@ -401,13 +412,13 @@
 			path = NetworkClient;
 			sourceTree = "<group>";
 		};
-		2F8FC46F249904BF00D3C80D /* TopService */ = {
+		2F8FC46F249904BF00D3C80D /* TopAPIService */ = {
 			isa = PBXGroup;
 			children = (
 				2F8FC470249904F800D3C80D /* TopService.swift */,
 				2F8FC4722499065200D3C80D /* TopRequestParams.swift */,
 			);
-			path = TopService;
+			path = TopAPIService;
 			sourceTree = "<group>";
 		};
 		2F8FC47424990D1A00D3C80D /* AppService */ = {
@@ -484,6 +495,7 @@
 			isa = PBXGroup;
 			children = (
 				2F8FC498249BA02700D3C80D /* WebViewPresenter.swift */,
+				2F8FC4AB249CF99800D3C80D /* WebViewPreserveDataForState.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -494,6 +506,22 @@
 				2F8FC49B249BB4FF00D3C80D /* PhotoManager.swift */,
 			);
 			path = PhotoManager;
+			sourceTree = "<group>";
+		};
+		2F8FC4A1249CC21F00D3C80D /* NavigationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2F8FC4A2249CC26900D3C80D /* MainNavigationViewController.swift */,
+			);
+			path = NavigationViewController;
+			sourceTree = "<group>";
+		};
+		2F8FC4A8249CEBA200D3C80D /* PreserveStateData */ = {
+			isa = PBXGroup;
+			children = (
+				2F8FC4A9249CEBBB00D3C80D /* PreserveDataForStateBase.swift */,
+			);
+			path = PreserveStateData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -569,9 +597,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F8FC485249A62B800D3C80D /* TopChartsResponseListingData.swift in Sources */,
-				2F8FC49F249BBAD800D3C80D /* WebViewCoordinator.swift in Sources */,
 				2F8FC4412498A8A400D3C80D /* String+Additions.swift in Sources */,
 				2F8FC3FE2497AA7C00D3C80D /* AppDelegate.swift in Sources */,
+				2F8FC4AA249CEBBB00D3C80D /* PreserveDataForStateBase.swift in Sources */,
 				2F8FC43A2498A79E00D3C80D /* Colors.swift in Sources */,
 				2F8FC4732499065200D3C80D /* TopRequestParams.swift in Sources */,
 				2F8FC471249904F800D3C80D /* TopService.swift in Sources */,
@@ -583,8 +611,10 @@
 				2F8FC489249A64DE00D3C80D /* TopChartsResponseChildListingData.swift in Sources */,
 				2F8FC48E249B5E9200D3C80D /* InitialFlowDelegate.swift in Sources */,
 				2F8FC4502498AA7600D3C80D /* ActivityIndicator.swift in Sources */,
+				2F8FC4AC249CF99800D3C80D /* WebViewPreserveDataForState.swift in Sources */,
 				2F8FC47B249A3A3700D3C80D /* UpdateCell.swift in Sources */,
 				2F8FC42F2498A4F000D3C80D /* InitialViewController.swift in Sources */,
+				2F8FC4A7249CEB6A00D3C80D /* PreserveStateData.swift in Sources */,
 				2F8FC479249A366700D3C80D /* TopCell.swift in Sources */,
 				2F8FC483249A57CD00D3C80D /* TopChartsResponseItem.swift in Sources */,
 				2F8FC49C249BB4FF00D3C80D /* PhotoManager.swift in Sources */,
@@ -603,9 +633,11 @@
 				2F8FC4482498A9AB00D3C80D /* Coordinator.swift in Sources */,
 				2F8FC4552498AB1900D3C80D /* ImageCache.swift in Sources */,
 				2F8FC4452498A90900D3C80D /* UILabel+Additions.swift in Sources */,
+				2F8FC4A3249CC26900D3C80D /* MainNavigationViewController.swift in Sources */,
 				2F8FC44C2498A9E400D3C80D /* AlertPresentable.swift in Sources */,
 				2F8FC46E249903A300D3C80D /* NetworkClient.swift in Sources */,
 				2F8FC45B2498ABAD00D3C80D /* NetworkError.swift in Sources */,
+				2F8FC4A5249CE76400D3C80D /* InitialPreserveDataForState.swift in Sources */,
 				2F8FC4312498A57C00D3C80D /* InitialPresenter.swift in Sources */,
 				2F8FC4282498A2CF00D3C80D /* Storyboard.swift in Sources */,
 				2F8FC4642499014D00D3C80D /* NetworkServiceProtocol.swift in Sources */,

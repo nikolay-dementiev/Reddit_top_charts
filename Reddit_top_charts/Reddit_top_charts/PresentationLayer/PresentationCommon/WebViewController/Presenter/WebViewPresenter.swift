@@ -10,19 +10,18 @@ import Foundation
 
 final class WebViewPresenter {
     private enum Settings {
-        static let photoAlbumForSave: String = "RedditPhotosAlbumName".localized
+        static let photoAlbumForSave = "RedditPhotosAlbumName"
     }
-    // MARK: - Props
-    private var stringUrl: String?
+    // MARK: Props
     weak var view: WebViewControllerInput!
-//    weak var flowDelegate: InitialFlowDelegate?
-
-    // MARK: - Private Props
-    lazy private var downloaderService = ImageDownloader()
+    
+    // MARK: Private Props
+    private var stringUrl: String?
+    lazy private var downloadService = ImageDownloader()
     lazy private var photoManager: PhotoManager = {
-        PhotoManager(albumName: Settings.photoAlbumForSave)
+        PhotoManager(albumName: Settings.photoAlbumForSave.localized)
     }()
-
+    
     init?(urlString: String?) {
         stringUrl = urlString
     }
@@ -34,7 +33,7 @@ extension WebViewPresenter: WebViewControllerOutput {
     }
     
     func cancelDownload() {
-        downloaderService.cancelDownload()
+        downloadService.cancelDownload()
     }
     
     func loadData(urlString: String?) {
@@ -42,10 +41,7 @@ extension WebViewPresenter: WebViewControllerOutput {
             let url = URL(string: urlString) else { return }
         
         view.startAnimate()
-                
-        downloaderService.downloadImage(from: url) { [weak self] result in
-            self?.view.stopAnimate()
-
+        downloadService.downloadImage(from: url) { [weak self] result in
             switch result {
             case .success(let imageWithUrl):
                 guard imageWithUrl.url == url else { return }

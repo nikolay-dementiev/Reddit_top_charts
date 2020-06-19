@@ -8,15 +8,13 @@
 
 import Foundation
 
-//typealias ListForecastItem = FiveDaysForecastResponseItem.ListForecastResponseItem
-
 class TopService {
     typealias TopServiceCompletion = (Result<TopChartsResponseListingData?, Error>) -> ()
 
-    // MARK: - Private Props
+    // MARK: Private Props
     private var networkService = NetworkService()
 
-    // MARK: - API
+    // MARK: API
     func getTopCharts(with params: TopRequestParams,
                       completion: @escaping TopServiceCompletion) {
 
@@ -33,5 +31,4 @@ class TopService {
             }
         }
     }
-
 }

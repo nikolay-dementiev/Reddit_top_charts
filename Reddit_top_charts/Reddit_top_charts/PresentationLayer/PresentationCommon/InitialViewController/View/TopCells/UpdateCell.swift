@@ -15,7 +15,7 @@ final class UpdateCell: UITableViewCell {
         setupStyles()
     }
     
-    // MARK: - API
+    // MARK: API
     override func awakeFromNib() {
         super.awakeFromNib()
         setupStyles()

@@ -23,7 +23,7 @@ class BaseImageDownloader {
         currentTask?.cancel()
     }
 
-    // MARK: - Private API
+    // MARK: Private API
     class func makeDefaultSession() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         return URLSession(configuration: configuration)
@@ -35,7 +35,7 @@ final class ImageDownloader: BaseImageDownloader {
 
     private var completion: DownloadCompletion?
 
-    // MARK: - API
+    // MARK: API
     func downloadImage(from url: URL, completion: @escaping DownloadCompletion) {
         self.completion = completion
 

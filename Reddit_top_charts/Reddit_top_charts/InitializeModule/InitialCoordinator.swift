@@ -9,37 +9,41 @@
 import UIKit
 
 final class InitialCoordinator {
-    // MARK: - Private Props
+    // MARK: Private Props
     private let navigator: Navigator
 
-    // MARK: - API
+    // MARK: API
     init(rootVC: UINavigationController) {
         self.navigator = Navigator(navigationController: rootVC)
-        styleRootVC(rootVC)
+        styleNavigationViewController(rootVC)
     }
 
-    // MARK: - Private API
+    // MARK: Private API
     private func startInitialVC() {
         let presenter = InitialPresenter()
         presenter.flowDelegate = self
-        let vc = ViewControllerFactory.makeInitialViewController(with: presenter)
+        let dataPreserver = InitialPreserveDataForState()
+        let vc = ViewControllerFactory.makeInitialViewController(with: presenter,
+                                                                 dataPreserver: dataPreserver)
         navigator.navigate(to: vc, transition: .root)
     }
     
     private func startWebViewController(withUrlString urlString: String?) {
         let presenter = WebViewPresenter(urlString: urlString)
-        let vc = ViewControllerFactory.makeWebViewViewController(with: presenter)
+        let dataPreserver = WebViewPreserveDataForState()
+        let vc = ViewControllerFactory.makeWebViewViewController(with: presenter,
+                                                                 dataPreserver: dataPreserver)
 
-        let newestNavigationController = UINavigationController(rootViewController: vc)
-        
-        navigator.navigate(to: newestNavigationController, transition: .modal) { [weak presenter] in
+        let nav = ViewControllerFactory.makeNavigationViewViewController(with: vc)
+        styleNavigationViewController(nav)
+        navigator.navigate(to: nav, transition: .modal) { [weak presenter] in
           presenter?.view.renderImageData(fromUrlString: urlString)
         }
     }
 
-    private func styleRootVC(_ rootVC: UINavigationController) {
-        rootVC.navigationBar.tintColor = .headlineColor
-        rootVC.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.textColor]
+    private func styleNavigationViewController(_ navigationController: UINavigationController) {
+        navigationController.navigationBar.tintColor = .headlineColor
+        navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.textColor]
     }
 }
 

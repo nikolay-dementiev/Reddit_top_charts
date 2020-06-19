@@ -13,12 +13,15 @@ final class TopCell: UITableViewCell {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var nCommentsLabel: UILabel!
     @IBOutlet private weak var thumbnailImageView: UIImageView!
+    @IBOutlet private weak var thumbnailContainerView: UIView!
+    @IBOutlet private weak var thumbnailContainerMinimumCotstraint: NSLayoutConstraint!
     @IBOutlet private weak var thumbnailSpinner: UIActivityIndicatorView!
+    
     lazy private var downloader = ImageDownloader()
     weak var delegate: TopCellProtocol?
     private let tapThumbnailImageViewRecognizer = UITapGestureRecognizer()
     
-    // MARK: - Private Props
+    // MARK: Private Props
     private var dataSource: TopChartsResponseChildListingData? {
         didSet {
             fullFillCell()
@@ -29,7 +32,7 @@ final class TopCell: UITableViewCell {
         setupInitialAppearence()
     }
     
-    // MARK: - API
+    // MARK: API
     override func awakeFromNib() {
         super.awakeFromNib()
         setupInitialAppearence()
@@ -45,24 +48,29 @@ final class TopCell: UITableViewCell {
         dataSource = data
     }
 
-    // MARK: - Private API
+    // MARK: Private API
     private func fullFillCell() {
         guard let dataSource = dataSource else { return }
 
         authorLabel.text = String(format: "%@%@", dataSource.author ?? "",
-                                  String (format: dataSource.created_utc != nil ? " - %@" : "",
-                                          dataSource.created_utc?.timeAgoDisplay() ?? ""))
+                                  String (format: dataSource.createdDate != nil ? " - %@" : "",
+                                          dataSource.createdDate?.timeAgoDisplay() ?? ""))
         
         titleLabel.text = dataSource.title
         nCommentsLabel.text = String(format: "%@: %@",
                                      "NumberOfComments".localized,
                                      dataSource.num_comments?.description ?? "")
         
-        if let thumbnailImageUrl = dataSource.previewImagesSourceUrl {
-            downloadMedia(thumbnailImageUrl)
-        }
+        downloadMedia(dataSource.previewImagesSourceUrl)
     }
 
+    func showThumbnail(_ flag: Bool = true) {
+        DispatchQueue.main.async { [weak self] in
+            self?.thumbnailContainerView.isHidden = !flag
+            self?.thumbnailContainerMinimumCotstraint.isActive = !flag
+        }
+    }
+    
     private func setupInitialAppearence() {
         tapThumbnailImageViewRecognizer.addTarget(self, action: #selector(tapOnThumbnailImageView))
         thumbnailImageView.addGestureRecognizer(tapThumbnailImageViewRecognizer)
@@ -84,14 +92,18 @@ final class TopCell: UITableViewCell {
             .color(.spinnerColor)
     }
 
-    private func downloadMedia(_ url: String) {
-        guard let url = URL(string: url) else { return }
+    private func downloadMedia(_ urlString: String?) {
+        guard let urlString = urlString,
+            let url = URL(string: urlString) else {
+            showThumbnail(false)
+            return
+        }
         setMedia(UIImage(named: "ImagePlaceholder")!)
         
         thumbnailSpinner.startAnimating()
         downloader.downloadImage(from: url) { [weak self] result in
             switch result {
-            case  .success(let imageWithUrl):
+            case .success(let imageWithUrl):
                 guard imageWithUrl.url == url else { return }
                 DispatchQueue.main.async {
                     self?.thumbnailSpinner.stopAnimating()

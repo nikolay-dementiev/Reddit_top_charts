@@ -9,7 +9,7 @@
 import UIKit
 
 final class AppService {
-    // MARK: - Props
+    // MARK: Props
     static let shared = AppService()
     
     var showNetworkActivity = false {
@@ -18,7 +18,7 @@ final class AppService {
         }
     }
 
-    // MARK: - Private API
+    // MARK: Private API
     private func showNetworkActivityIndicator(_ value: Bool) {
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = value

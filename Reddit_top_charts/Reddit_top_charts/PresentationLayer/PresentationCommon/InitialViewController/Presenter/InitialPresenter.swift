@@ -6,23 +6,32 @@
 //  Copyright © 2020 test reddit. All rights reserved.
 //
 
+import Foundation
+
 final class InitialPresenter {
     private enum Settings {
         static let limitForDataFetching: Int = 10
+        static let isFirstLaunchKey = "isFirstLaunchKey"
     }
-    // MARK: - Props
+    // MARK: Props
     weak var view: InitialViewInput!
     weak var flowDelegate: InitialFlowDelegate?
 
-    // MARK: - Private Props
+    // MARK: Private Props
     private let restService = TopService()
-
 }
 
 extension InitialPresenter: InitialViewOutput {
     func viewIsReady() {
         view.setupInitialState()
+        if !UserDefaults.standard.bool(forKey: Settings.isFirstLaunchKey) {
+            view.fetchInitialDataPortion()
+            
+            UserDefaults.standard.set(true, forKey: Settings.isFirstLaunchKey)
+            UserDefaults.standard.synchronize()
+        }
     }
+    
 
     func loadData(after: String? = nil,
                   count: Int? = nil,
@@ -40,8 +49,6 @@ extension InitialPresenter: InitialViewOutput {
                 self?.view.renderTopChartsData(items,
                                                after: after,
                                                completion: completion)
-//                self?.flowDelegate?.didReceiveData(items, completion: completion)
-                
             case .failure(let error):
                 self?.view.showAlert(title: nil,
                                      message: error.localizedDescription)
@@ -52,24 +59,4 @@ extension InitialPresenter: InitialViewOutput {
     func openImageUrlInWebView(urlString: String?) {
         flowDelegate?.openImageUrlInWebView(urlString: urlString)
     }
-    
-//    func didSearchAction(for code: String?) {
-////        view.startAnimate()
-////
-////        guard let code = code else { return }
-////        let params = FiveDayForecastRequestParams.init(countryName: code)
-////
-////        restService.getFiveDaysForecast(with: params) { [weak self] (result) in
-////            self?.view.stopAnimate()
-////
-////            switch result {
-////            case .success(let items):
-////                self?.flowDelegate?.didReceiveFiveDaysForecast(items)
-////            case .failure(let error):
-////                self?.view.showAlert(title: nil,
-////                                     message: error.localizedDescription)
-////            }
-////        }
-//    }
-
 }

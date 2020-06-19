@@ -9,6 +9,5 @@
 import Foundation
 
 protocol InitialFlowDelegate: class {
-//    func didReceiveData(_ itemData: TopChartsResponseListingData?, completion: (() -> Void)?)
     func openImageUrlInWebView(urlString: String?)
 }

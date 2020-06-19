@@ -11,6 +11,7 @@ protocol InitialViewInput: class, AlertPresentable, ActivityIndicator {
     func renderTopChartsData(_ data: TopChartsResponseListingData?,
                              after: String?,
                              completion: (() -> Void)?)
+    func fetchInitialDataPortion()
 }
 
 protocol InitialViewOutput: class {
@@ -18,14 +19,12 @@ protocol InitialViewOutput: class {
     func loadData(after: String?,
                   count: Int?,
                   completion: (() -> Void)?)
-    //    func didSearchAction(for code: String?)
     func openImageUrlInWebView(urlString: String?)
 }
 
 extension InitialViewInput {
     func setupInitialState() {}
 }
-
 
 protocol TopCellProtocol: class {
     func thumbnailTappedAction(urlString: String?)

@@ -11,7 +11,7 @@ import UIKit
 class ImageCache {
     static let shared = ImageCache()
 
-    // MARK: - Private
+    // MARK: Private
     private let cache = NSCache<NSString, UIImage>()
     private init() {}
 }

@@ -15,7 +15,7 @@ final class Navigator {
 
     private let navigationController: UINavigationController
 
-    // MARK: - API
+    // MARK: API
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
